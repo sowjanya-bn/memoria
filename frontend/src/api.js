@@ -45,6 +45,12 @@ export async function fetchExpand(subjectUri, predicateUri) {
   return r.json();
 }
 
+export async function fetchNeighbours(uri) {
+  const r = await fetch(`${BASE}/neighbours?uri=${encodeURIComponent(uri)}`);
+  if (!r.ok) throw new Error(`Failed to fetch neighbours for ${uri}`);
+  return r.json();
+}
+
 export async function fetchSearch(q, limit = 10) {
   const r = await fetch(`${BASE}/search?q=${encodeURIComponent(q)}&limit=${limit}`);
   if (!r.ok) throw new Error("Search failed");

@@ -250,6 +250,37 @@ def search(q: str = Query(..., min_length=1), limit: int = Query(default=10, ge=
     return results[:limit]
 
 
+@app.get("/neighbours")
+def neighbours(uri: str = Query(...)):
+    """Primary neighbours of an entity — for the drift growing graph."""
+    model = get_model()
+    tier_map = get_tier_map()
+
+    if uri not in model.entities:
+        raise HTTPException(status_code=404, detail=f"Entity not found: {uri}")
+
+    from .scene import generate_scene
+    s = generate_scene(uri, model, tier_map)
+    rec = model.entities[uri]
+
+    return {
+        "uri": uri,
+        "label": rec.label,
+        "class": rec.classes[0].split("#")[-1].split("/")[-1] if rec.classes else "",
+        "description": rec.description,
+        "edges": [
+            {
+                "predicate_label": e.predicate_label,
+                "predicate_uri": e.predicate_uri,
+                "target_uri": e.target_uri,
+                "target_label": e.target_label,
+                "target_class": e.target_class,
+            }
+            for e in s.primary_edges
+        ],
+    }
+
+
 @app.get("/entity/{uri:path}")
 def entity(uri: str):
     """Full entity record."""

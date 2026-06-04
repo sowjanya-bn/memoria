@@ -34,6 +34,8 @@ export default function App() {
           <span className="app-wordmark">Memoria</span>
           <SearchBox onSelect={handleNodeClick} />
           <Link to="/installation" className="installation-link">Installation mode</Link>
+          <Link to="/drift-demo" className="installation-link">Oracle Drift</Link>
+          <Link to="/cosmos" className="installation-link">Cosmos</Link>
         </div>
         <StartingPoints onSelect={handleNodeClick} />
       </div>

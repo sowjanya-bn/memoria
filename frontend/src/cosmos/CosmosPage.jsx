@@ -329,6 +329,7 @@ export default function CosmosPage() {
             {selected.label}
           </span>
         )}
+        <Link to="/cosmos-gpu" style={{ color: "#f59e0b", fontSize: 12, textDecoration: "none" }}>GPU ✦</Link>
         <Link to="/" style={{ color: "#1e3347", fontSize: 12, textDecoration: "none" }}>← Desktop</Link>
         <Link to="/drift-demo" style={{ color: "#1e3347", fontSize: 12, textDecoration: "none" }}>Drift</Link>
       </div>

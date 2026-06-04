@@ -1,0 +1,400 @@
+/* ── Installation mode ─────────────────────────────────────────────────── */
+
+.inst-root {
+  position: fixed;
+  inset: 0;
+  background: #060d1a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ── Chrome ────────────────────────────────────────────────────────────── */
+.inst-chrome {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  gap: 16px;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.inst-wordmark {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.inst-session-pips {
+  display: flex;
+  gap: 6px;
+  margin-left: 16px;
+}
+
+.inst-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1px solid #334155;
+  transition: background 0.3s;
+}
+
+.inst-pip.used {
+  background: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.inst-controls {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.inst-back-btn,
+.inst-home-btn {
+  font-size: 14px;
+  color: #94a3b8;
+  background: none;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.inst-back-btn:hover,
+.inst-home-btn:hover { color: #e2e8f0; border-color: #64748b; }
+
+.inst-desktop-link {
+  font-size: 12px;
+  color: #475569;
+  text-decoration: none;
+  border: 1px solid #1e293b;
+  border-radius: 4px;
+  padding: 4px 10px;
+}
+.inst-desktop-link:hover { color: #94a3b8; }
+
+/* ── Canvas ────────────────────────────────────────────────────────────── */
+.inst-canvas {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Focal node — centred */
+.inst-focal-wrap {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* Ring nodes — offset via CSS custom properties */
+.inst-ring-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty)));
+  z-index: 4;
+}
+
+.inst-edge-label {
+  font-size: 11px;
+  color: #475569;
+  text-align: center;
+  max-width: 100px;
+  line-height: 1.3;
+}
+
+/* ── Dwell node ────────────────────────────────────────────────────────── */
+.dwell-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: filter 0.2s;
+}
+
+.dwell-node:hover { filter: brightness(1.15); }
+.dwell-node.focal { cursor: default; }
+.dwell-node.grouped { border-radius: 16px; }
+.dwell-node.disabled { cursor: not-allowed; opacity: 0.5; pointer-events: none; }
+
+.dwell-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.dwell-group-pred {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.dwell-group-count {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f59e0b;
+  line-height: 1;
+}
+
+/* ── Stream dot ────────────────────────────────────────────────────────── */
+.inst-stream-dot {
+  position: absolute;
+  bottom: -14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* ── Info bar ──────────────────────────────────────────────────────────── */
+.inst-info-bar {
+  padding: 14px 32px;
+  background: rgba(6, 13, 26, 0.85);
+  border-top: 1px solid #1e293b;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.inst-info-label {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.inst-info-desc {
+  font-size: 14px;
+  color: #94a3b8;
+  flex: 1;
+}
+
+.inst-info-note {
+  font-size: 12px;
+  color: #f59e0b;
+  font-style: italic;
+  margin-left: auto;
+}
+
+/* ── Main layout (canvas + panel) ─────────────────────────────────────── */
+.inst-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.inst-main .inst-canvas {
+  flex: 1;
+}
+
+/* ── Data panel ────────────────────────────────────────────────────────── */
+.inst-panel {
+  width: 280px;
+  flex-shrink: 0;
+  background: #0a1628;
+  border-left: 1px solid #1e293b;
+  padding: 24px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inst-panel-image {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.inst-panel-label {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+
+.inst-panel-class {
+  font-size: 11px;
+  color: #475569;
+  background: #1e293b;
+  padding: 2px 8px;
+  border-radius: 10px;
+  align-self: flex-start;
+}
+
+.inst-panel-desc {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.inst-panel-note {
+  font-size: 12px;
+  color: #f59e0b;
+  font-style: italic;
+}
+
+.inst-panel-connections h3 {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #334155;
+  margin-bottom: 10px;
+}
+
+.inst-panel-connections ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+}
+
+.inst-panel-connections li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inst-conn-pred {
+  font-size: 10px;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inst-conn-target {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.inst-conn-more {
+  font-size: 12px;
+  color: #334155;
+  font-style: italic;
+}
+
+/* ── Starting points ───────────────────────────────────────────────────── */
+.inst-starting {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 40px;
+}
+
+.inst-title {
+  font-size: 52px;
+  font-weight: 900;
+  color: #f59e0b;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.inst-subtitle {
+  font-size: 20px;
+  color: #475569;
+  letter-spacing: 0.05em;
+}
+
+.inst-loading { color: #334155; font-size: 16px; }
+
+.inst-starting-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: center;
+  max-width: 900px;
+}
+
+.inst-starting-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Session limit ─────────────────────────────────────────────────────── */
+.inst-limit-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 13, 26, 0.92);
+  z-index: 20;
+  gap: 12px;
+  font-size: 28px;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.inst-limit-sub {
+  font-size: 16px;
+  color: #475569;
+}
+
+.inst-reset-btn {
+  margin-top: 16px;
+  padding: 14px 40px;
+  background: #f59e0b;
+  color: #000;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+.inst-reset-btn:hover { background: #fbbf24; }
+
+/* ── Oracle Drift overlay (Phase 4) ────────────────────────────────────── */
+.drift-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(124,58,237,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 15;
+  animation: drift-breathe 3s ease-in-out infinite;
+}
+
+@keyframes drift-breathe {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1;   }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}

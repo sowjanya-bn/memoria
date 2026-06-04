@@ -40,6 +40,7 @@ app.add_middleware(
 
 _model: Optional[GraphModel] = None
 _tier_map: Optional[EdgeTierMap] = None
+_score_index: Optional[dict] = None   # uri → NavigabilityScore, pre-computed at startup
 
 
 def get_model() -> GraphModel:
@@ -56,6 +57,14 @@ def get_tier_map() -> EdgeTierMap:
     return _tier_map
 
 
+def get_score_index() -> dict:
+    global _score_index
+    if _score_index is None:
+        scores = compute_scores(get_model(), get_tier_map(), top_n=len(get_model().entities))
+        _score_index = {s.uri: s for s in scores}
+    return _score_index
+
+
 # ── Routes ──────────────────────────────────────────────────────────────────
 
 @app.on_event("startup")
@@ -67,19 +76,20 @@ async def startup():
     t0 = time.perf_counter()
     model = get_model()
     get_tier_map()
+    t1 = time.perf_counter()
+    log.info(f"Graph loaded — {len(model.entities)} entities, {model.graph.number_of_edges()} edges ({t1-t0:.1f}s)")
+    log.info("Pre-computing navigability scores…")
+    get_score_index()
     elapsed = time.perf_counter() - t0
-    log.info(
-        f"Graph ready — {len(model.entities)} entities, "
-        f"{model.graph.number_of_edges()} edges "
-        f"({elapsed:.1f}s)"
-    )
+    log.info(f"Ready ({elapsed:.1f}s total)")
 
 
 @app.get("/suggestions")
 def suggestions(top: int = Query(default=20, ge=1, le=100)):
     """Top suggested starting points, ranked by navigability score."""
-    scores = compute_scores(get_model(), get_tier_map(), top_n=top)
     model = get_model()
+    index = get_score_index()
+    sorted_scores = sorted(index.values(), key=lambda s: s.score, reverse=True)[:top]
     return [
         {
             "uri": s.uri,
@@ -88,7 +98,7 @@ def suggestions(top: int = Query(default=20, ge=1, le=100)):
             "note": s.note,
             "score": round(s.score, 4),
         }
-        for s in scores
+        for s in sorted_scores
     ]
 
 
@@ -114,8 +124,8 @@ async def scene(
     if uri not in model.entities:
         raise HTTPException(status_code=404, detail=f"Entity not found: {uri}")
 
-    scores = compute_scores(model, tier_map, top_n=len(model.entities))
-    nav_note = next((s.note for s in scores if s.uri == uri), None)
+    nav_note = get_score_index().get(uri, None)
+    nav_note = nav_note.note if nav_note else None
 
     s = generate_scene(
         focal_uri=uri,

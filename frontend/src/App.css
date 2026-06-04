@@ -55,6 +55,17 @@ ul { list-style: none; }
 
 .loading-indicator { font-size: 12px; color: var(--text-muted); }
 .error-msg { font-size: 12px; color: var(--danger); }
+.installation-link {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.installation-link:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ── Search box ────────────────────────────────────────────────────────── */
 .search-box { position: relative; flex: 1; max-width: 360px; }

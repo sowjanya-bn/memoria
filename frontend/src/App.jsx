@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { useScene } from "./useScene";
 import GraphCanvas from "./GraphCanvas";
 import EntityCard from "./EntityCard";
@@ -32,6 +33,7 @@ export default function App() {
         <div className="top-bar">
           <span className="app-wordmark">Memoria</span>
           <SearchBox onSelect={handleNodeClick} />
+          <Link to="/installation" className="installation-link">Installation mode</Link>
         </div>
         <StartingPoints onSelect={handleNodeClick} />
       </div>
@@ -45,6 +47,7 @@ export default function App() {
         <SearchBox onSelect={handleNodeClick} />
         {loading && <span className="loading-indicator">Loading…</span>}
         {error && <span className="error-msg">{error}</span>}
+        <Link to="/installation" className="installation-link">Installation mode</Link>
       </div>
 
       {breadcrumb.length > 0 && (

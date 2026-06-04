@@ -45,6 +45,12 @@ def compute_scores(
     subject_counts = {n: g.out_degree(n) for n in g.nodes()}
     max_subject = max(subject_counts.values()) or 1
 
+    # Pre-compute max distinct predicates across all nodes (used for normalisation)
+    max_preds = max(
+        (len(set(d["predicate"] for _, _, d in g.out_edges(n, data=True))) for n in g.nodes()),
+        default=1,
+    ) or 1
+
     scores: list[NavigabilityScore] = []
 
     for uri in g.nodes():
@@ -76,12 +82,6 @@ def compute_scores(
         if not primary_preds:
             continue  # no primary edges → not a useful starting point
 
-        # Normalise predicate diversity against graph-wide max distinct predicates
-        all_pred_counts = []
-        for n in g.nodes():
-            preds = set(d["predicate"] for _, _, d in g.out_edges(n, data=True))
-            all_pred_counts.append(len(preds))
-        max_preds = max(all_pred_counts) or 1
         pd_norm = len(primary_preds) / max_preds
 
         # Degree

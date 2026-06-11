@@ -20,6 +20,7 @@ export default defineConfig({
       '/expand': 'http://localhost:8765',
       '/entity': 'http://localhost:8765',
       '/neighbours': 'http://localhost:8765',
+      '/types': 'http://localhost:8765',
     },
   },
 })

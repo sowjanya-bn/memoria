@@ -46,6 +46,7 @@ export default function App() {
           <Link to="/installation" className="installation-link">Installation mode</Link>
           <Link to="/drift-demo" className="installation-link">Oracle Drift</Link>
           <Link to="/cosmos" className="installation-link">Cosmos</Link>
+          <Link to="/explore" className="installation-link">Explorer</Link>
         </div>
         <StartingPoints onSelect={handleNodeClick} />
       </div>

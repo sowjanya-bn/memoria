@@ -12,12 +12,17 @@
   "dependencies": {
     "@cosmograph/cosmograph": "^2.3.2",
     "@cosmograph/react": "^2.3.2",
+    "@react-sigma/core": "^5.0.6",
     "cytoscape": "^3.34.0",
     "cytoscape-fcose": "^2.2.0",
     "d3-force": "^3.0.0",
+    "graphology": "^0.26.0",
+    "graphology-layout-forceatlas2": "^0.10.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-router-dom": "^7.17.0"
+    "react-router-dom": "^7.17.0",
+    "reagraph": "^4.31.0",
+    "sigma": "^3.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

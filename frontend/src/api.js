@@ -51,6 +51,12 @@ export async function fetchNeighbours(uri) {
   return r.json();
 }
 
+export async function fetchTypes() {
+  const r = await fetch(`${BASE}/types`);
+  if (!r.ok) throw new Error("Failed to fetch types");
+  return r.json();
+}
+
 export async function fetchSearch(q, limit = 10) {
   const r = await fetch(`${BASE}/search?q=${encodeURIComponent(q)}&limit=${limit}`);
   if (!r.ok) throw new Error("Search failed");

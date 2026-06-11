@@ -84,6 +84,22 @@ async def startup():
     log.info(f"Ready ({elapsed:.1f}s total)")
 
 
+@app.get("/types")
+def entity_types():
+    """Distinct entity classes present in the loaded KG, with counts."""
+    model = get_model()
+    counts: dict[str, int] = {}
+    for rec in model.entities.values():
+        for cls in rec.classes:
+            short = cls.split("#")[-1].split("/")[-1]
+            if short:
+                counts[short] = counts.get(short, 0) + 1
+    return sorted(
+        [{"type": k, "count": v} for k, v in counts.items()],
+        key=lambda x: -x["count"],
+    )
+
+
 @app.get("/suggestions")
 def suggestions(top: int = Query(default=20, ge=1, le=100)):
     """Top suggested starting points, ranked by navigability score."""

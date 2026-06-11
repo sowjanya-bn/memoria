@@ -18,7 +18,7 @@ function nodeColor(cls) {
   return CLASS_COLORS[cls] || CLASS_COLORS.default;
 }
 
-export default function GraphCanvas({ scene, onNodeClick, onGroupedClick, streaming }) {
+export default function GraphCanvas({ scene, onNodeClick, onNodeExpand, onGroupedClick, streaming }) {
   const containerRef = useRef(null);
   const cyRef = useRef(null);
 
@@ -62,6 +62,32 @@ export default function GraphCanvas({ scene, onNodeClick, onGroupedClick, stream
           label: edge.predicate_label,
           predicate_uri: edge.predicate_uri,
           type: "primary",
+        },
+      });
+    });
+
+    // Expanded neighbour nodes (pulled in via fetchNeighbours)
+    (scene.expanded_edges || []).forEach((edge, i) => {
+      const tid = edge.target_uri;
+      if (!seen.has(tid)) {
+        elements.push({
+          data: {
+            id: tid,
+            label: edge.target_label,
+            class: edge.target_class,
+            type: "expanded",
+            color: nodeColor(edge.target_class),
+          },
+        });
+        seen.add(tid);
+      }
+      elements.push({
+        data: {
+          id: `e-expanded-${i}-${edge.source_uri}-${tid}`,
+          source: edge.source_uri,
+          target: tid,
+          label: edge.predicate_label,
+          type: "expanded",
         },
       });
     });
@@ -136,6 +162,26 @@ export default function GraphCanvas({ scene, onNodeClick, onGroupedClick, stream
             "font-weight": "bold",
             color: "#fff",
             "z-index": 10,
+          },
+        },
+        {
+          selector: 'node[type="expanded"]',
+          style: {
+            width: 34,
+            height: 34,
+            "font-size": "10px",
+            "border-width": 2,
+            "border-color": "#38bdf8",
+            opacity: 0.85,
+          },
+        },
+        {
+          selector: 'edge[type="expanded"]',
+          style: {
+            "line-style": "dotted",
+            "line-color": "#38bdf8",
+            "target-arrow-color": "#38bdf8",
+            width: 1,
           },
         },
         {
@@ -216,7 +262,9 @@ export default function GraphCanvas({ scene, onNodeClick, onGroupedClick, stream
           predicateUri: data.predicate_uri,
           label: data.label,
         });
-      } else if (data.type === "primary" || data.type === "focal") {
+      } else if (data.type === "primary") {
+        onNodeExpand?.(data.id);
+      } else if (data.type === "focal") {
         onNodeClick?.(data.id);
       }
     });

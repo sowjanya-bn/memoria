@@ -14,6 +14,7 @@ const EMPTY_SCENE = {
   breadcrumb: [],
   total_edges: null,   // how many edges to expect (from meta chunk)
   streaming: true,     // true until "done" chunk arrives
+  expanded_edges: [],  // edges pulled in via fetchNeighbours
 };
 
 export function useScene() {
@@ -76,11 +77,26 @@ export function useScene() {
     }
   }, [scene, breadcrumb]);
 
+  const mergeExpanded = useCallback((sourceUri, edges) => {
+    setScene((prev) => {
+      if (!prev) return prev;
+      const existingIds = new Set([
+        prev.focal_uri,
+        ...prev.primary_edges.map((e) => e.target_uri),
+        ...(prev.expanded_edges || []).map((e) => e.target_uri),
+      ]);
+      const fresh = edges
+        .map((e) => ({ ...e, source_uri: sourceUri }))
+        .filter((e) => !existingIds.has(e.target_uri));
+      return { ...prev, expanded_edges: [...(prev.expanded_edges || []), ...fresh] };
+    });
+  }, []);
+
   const reset = useCallback(() => {
     setScene(null);
     setBreadcrumb([]);
     setError(null);
   }, []);
 
-  return { scene, breadcrumb, loading, error, navigate, reset };
+  return { scene, breadcrumb, loading, error, navigate, mergeExpanded, reset };
 }

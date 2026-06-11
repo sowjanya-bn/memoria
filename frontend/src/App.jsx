@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useScene } from "./useScene";
+import { fetchNeighbours } from "./api";
 import GraphCanvas from "./GraphCanvas";
 import EntityCard from "./EntityCard";
 import SearchBox from "./SearchBox";
@@ -10,7 +11,7 @@ import StartingPoints from "./StartingPoints";
 import "./App.css";
 
 export default function App() {
-  const { scene, breadcrumb, loading, error, navigate, reset } = useScene();
+  const { scene, breadcrumb, loading, error, navigate, mergeExpanded, reset } = useScene();
   const [expandHandle, setExpandHandle] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [labelCache, setLabelCache] = useState({});
@@ -22,6 +23,15 @@ export default function App() {
     setShowDetails(false);
     navigate(uri);
   }, [scene, navigate]);
+
+  const handleNodeExpand = useCallback(async (uri) => {
+    try {
+      const result = await fetchNeighbours(uri);
+      mergeExpanded(uri, result.edges);
+    } catch (e) {
+      console.error("Failed to expand node:", e);
+    }
+  }, [mergeExpanded]);
 
   const handleGroupedExpand = useCallback((handle) => {
     setExpandHandle(handle);
@@ -66,6 +76,7 @@ export default function App() {
           <GraphCanvas
             scene={scene}
             onNodeClick={handleNodeClick}
+            onNodeExpand={handleNodeExpand}
             onGroupedClick={handleGroupedExpand}
             streaming={scene?.streaming}
           />

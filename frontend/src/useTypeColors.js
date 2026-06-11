@@ -10,7 +10,7 @@ const DEFAULT_COLOR = "#4a7fa8";
 function buildPalette(n) {
   return Array.from({ length: n }, (_, i) => {
     const h = Math.round((i / n) * 360);
-    return `hsl(${h}, 75%, 58%)`;
+    return `hsl(${h}, 30%, 42%)`;
   });
 }
 

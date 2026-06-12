@@ -12,7 +12,7 @@ export default function StartingPoints({ onSelect }) {
     let cancelled = false;
     async function load(attempt = 0) {
       try {
-        const data = await fetchSuggestions(50);
+        const data = await fetchSuggestions(150);
         if (!cancelled) { setAll(data); setLoading(false); }
       } catch {
         if (!cancelled && attempt < 10) {

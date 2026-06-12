@@ -43,9 +43,6 @@ export default function App() {
         <div className="top-bar">
           <span className="app-wordmark">Memoria</span>
           <SearchBox onSelect={handleNodeClick} />
-          <Link to="/installation" className="installation-link">Installation mode</Link>
-          <Link to="/drift-demo" className="installation-link">Oracle Drift</Link>
-          <Link to="/cosmos" className="installation-link">Cosmos</Link>
           <Link to="/explore" className="installation-link">Explorer</Link>
         </div>
         <StartingPoints onSelect={handleNodeClick} />
@@ -60,7 +57,6 @@ export default function App() {
         <SearchBox onSelect={handleNodeClick} />
         {loading && <span className="loading-indicator">Loading…</span>}
         {error && <span className="error-msg">{error}</span>}
-        <Link to="/installation" className="installation-link">Installation mode</Link>
       </div>
 
       {breadcrumb.length > 0 && (

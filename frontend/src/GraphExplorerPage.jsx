@@ -228,7 +228,7 @@ export default function GraphExplorerPage() {
   useEffect(() => {
     async function seed() {
       let suggestions;
-      try { suggestions = await fetchSuggestions(14); }
+      try { suggestions = await fetchSuggestions(100); }
       catch { setStatus("Failed to load"); return; }
       suggestions.forEach((s) => {
         if (!nodeMapRef.current[s.uri]) {

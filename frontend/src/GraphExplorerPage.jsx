@@ -5,7 +5,6 @@
  * Route: /explore
  */
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 import {
   forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide,
 } from "d3-force";
@@ -572,8 +571,6 @@ draw();
           </span>
         )}
         <button onClick={exportHTML} style={{ background: "none", border: "1px solid #1e3347", color: "#475569", fontSize: 11, padding: "3px 10px", borderRadius: 4, cursor: "pointer" }}>Export HTML</button>
-        <Link to="/cosmos" style={{ color: "#1e3347", fontSize: 12, textDecoration: "none" }}>Cosmos</Link>
-        <Link to="/" style={{ color: "#1e3347", fontSize: 12, textDecoration: "none" }}>← Desktop</Link>
       </div>
 
       {/* Main area — canvas + floating panel overlay */}

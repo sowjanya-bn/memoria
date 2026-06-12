@@ -4,3 +4,7 @@ __pycache__/
 .env
 liveaid_graph.json
 liveaid_instances_master.jsonld
+*.ttl
+*.bz2
+train.txt
+test.txt

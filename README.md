@@ -1,77 +1,43 @@
 # Memoria
 
-A domain-agnostic RDF knowledge graph explorer. Transforms any TTL file into a staged, navigable scene explorer.
+A domain-agnostic RDF knowledge graph explorer. Load any `.ttl` file and navigate it as an interactive force-directed graph.
 
 ---
 
-## Run
-
-### Backend
+## Quick Start
 
 ```bash
-# From the repo root
-MEMORIA_TTL=liveaid_instances_master.ttl python3 -m uvicorn backend.api:app --host 0.0.0.0 --port 8765 --reload
+MEMORIA_TTL=liveaid_instances_master.ttl ./start.sh
 ```
 
-Logs on startup:
-```
-INFO:     Application startup complete.
-INFO:memoria:Loading graph from liveaid_instances_master.ttl…
-INFO:memoria:Graph ready — 5721 entities, 12982 edges (3.2s)
-```
+Opens at **http://localhost:5173**
 
-### Frontend
-
-```bash
-# In a second terminal
-cd frontend
-npm install       # first time only
-npm run dev
-```
-
-Open **http://localhost:5173**
+`start.sh` kills stale processes on ports 8765/5173, starts the FastAPI backend, waits for it to be ready, then starts the Vite frontend.
 
 ---
 
-## Both at once
+## Manual Start
 
 ```bash
-./start.sh
+# Backend (from repo root)
+MEMORIA_TTL=liveaid_instances_master.ttl uvicorn backend.api:app --host 0.0.0.0 --port 8765 --reload
+
+# Frontend (separate terminal)
+cd frontend && npm install && npm run dev
 ```
 
 ---
 
-## Use a different graph
-
-```bash
-MEMORIA_TTL=path/to/your.ttl ./start.sh
-```
-
----
-
-## CLI (Phase 1 — no UI)
-
-```bash
-# Navigability report
-python3 -m backend.cli liveaid_instances_master.ttl --report
-
-# Scene for a specific entity
-python3 -m backend.cli liveaid_instances_master.ttl ex:Queen
-
-# Save scene JSON to file
-python3 -m backend.cli liveaid_instances_master.ttl ex:LiveAid1985 --out scene.json
-```
-
----
-
-## API endpoints
+## API Endpoints
 
 | Method | Path | Description |
-|---|---|---|
-| GET | `/suggestions?top=N` | Ranked starting point suggestions |
+|--------|------|-------------|
+| GET | `/suggestions?top=N` | Top-N navigable starting points |
 | GET | `/scene?uri=<uri>` | Stream scene as NDJSON |
+| GET | `/neighbours?uri=<uri>` | Primary neighbours of an entity |
+| GET | `/types` | Distinct entity classes with counts |
 | GET | `/search?q=<query>` | Label autocomplete |
-| GET | `/expand?subject_uri=&predicate_uri=` | Expand a grouped handle |
+| GET | `/expand?subject_uri=&predicate_uri=` | Expand a grouped edge handle |
 | GET | `/entity/<uri>` | Full entity record |
 
 ---
@@ -79,4 +45,11 @@ python3 -m backend.cli liveaid_instances_master.ttl ex:LiveAid1985 --out scene.j
 ## Stack
 
 - **Backend** — Python, RDFLib, NetworkX, FastAPI, uvicorn
-- **Frontend** — React, Vite, Cytoscape.js
+- **Frontend** — React, Vite, d3-force, Cytoscape.js
+
+---
+
+## Docs
+
+- [`EXPLORER_HANDOVER.md`](EXPLORER_HANDOVER.md) — frontend/backend flow, architecture, library choices, file map
+- [`PAGINATION_STRATEGIES.md`](PAGINATION_STRATEGIES.md) — implemented and planned graph pagination approaches

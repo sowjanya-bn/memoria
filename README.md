@@ -2,6 +2,10 @@
 
 A domain-agnostic RDF knowledge graph explorer. Load any `.ttl` file and navigate it as an interactive force-directed graph.
 
+> **POC** — built to explore how RDF graphs can be rendered and navigated visually. The demo uses a Live Aid knowledge graph.
+
+![Memoria demo](output.gif)
+
 ---
 
 ## Quick Start
